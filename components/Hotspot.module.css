@@ -1,0 +1,145 @@
+.hotspot {
+  position: fixed;
+  /* NO establecer top/left aquí - se establecen dinámicamente por el hook de física */
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  z-index: 50;
+  pointer-events: auto;
+  /* Transform se establece dinámicamente por el hook de física */
+  will-change: transform, left, top;
+  /* Asegurar que el contenedor no cambie de tamaño cuando los elementos aparecen */
+  min-width: 0;
+}
+
+.rightSide {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+.hotspotDotWrapper {
+  position: relative;
+  flex-shrink: 0;
+  z-index: 2;
+  /* Asegurar que el wrapper no cambie de tamaño */
+  width: 9.6px;
+  height: 9.6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotspotDot {
+  width: 9.6px;
+  height: 9.6px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--accent-color);
+  position: relative;
+  transform-origin: center center;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+.pulseRing {
+  position: absolute;
+  top: -3.2px;
+  left: -3.2px;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--accent-color);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+  transform-origin: center center;
+}
+
+/* El scale del punto se maneja ahora con Framer Motion en el componente */
+
+.hotspotLine {
+  height: 0.8px;
+  background: var(--accent-color);
+  margin: 0 14.4px;
+  width: 144px;
+  transform-origin: left center;
+  flex-shrink: 0;
+}
+
+.rightSide .hotspotLine {
+  transform-origin: right center;
+}
+
+.hotspotCard {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 9.6px 14.4px;
+  border-radius: 6.4px;
+  border-left: 2.4px solid var(--accent-color);
+  pointer-events: none;
+  width: 144px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  flex-shrink: 0;
+}
+
+.rightSide .hotspotCard {
+  border-left: none;
+  border-right: 3px solid var(--accent-color);
+  text-align: right;
+}
+
+.hotspotCard h3 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  margin-bottom: 3.2px;
+}
+
+.hotspotCard p {
+  font-size: 0.6rem;
+  color: #666;
+  margin-bottom: 6.4px;
+}
+
+.tags span {
+  font-size: 0.52rem;
+  background: #eee;
+  padding: 1.6px 4.8px;
+  border-radius: 3.2px;
+  margin-right: 3.2px;
+  display: inline-block;
+}
+
+@media (max-width: 768px) {
+  .hotspotDotWrapper {
+    width: 13px;
+    height: 13px;
+  }
+
+  .hotspotDot {
+    width: 11px;
+    height: 11px;
+  }
+
+  .pulseRing {
+    top: -4.5px;
+    left: -4.5px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .hotspotLine {
+    display: none;
+  }
+
+  .hotspotCard {
+    display: none;
+  }
+}
+

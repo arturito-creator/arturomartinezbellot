@@ -1,0 +1,225 @@
+.slider {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 20;
+}
+
+.slidesWrapper {
+  display: flex;
+  height: 100%;
+}
+
+.slide {
+  flex: 0 0 100%;
+  height: 100%;
+  position: relative;
+  padding: 4.8rem clamp(1.2rem, 3.2vw, 3.2rem);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slideHome {
+  padding: 0;
+}
+
+.sliderArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44.8px;
+  height: 44.8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  transition: all 0.3s ease;
+  z-index: 100;
+  pointer-events: auto;
+}
+
+.sliderArrowIcon {
+  width: 16px;
+  height: 16px;
+  stroke: var(--text-color);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  filter: drop-shadow(0 3.2px 9.6px rgba(0, 255, 157, 0.3));
+}
+
+.sliderArrow:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.sliderArrow:hover .sliderArrowIcon {
+  stroke: var(--accent-color);
+}
+
+.sliderArrowLeft {
+  left: 1.6rem;
+}
+
+.sliderArrowRight {
+  right: 1.6rem;
+}
+
+.sliderIndicator {
+  position: absolute;
+  bottom: 1.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.4rem;
+  z-index: 70;
+  pointer-events: auto;
+}
+
+.sliderIndicator span {
+  position: relative;
+  width: 25.6px;
+  height: 1.6px;
+  display: inline-block;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  /* Aumentar hitbox sin cambiar apariencia visual */
+  padding: 1.2rem 0;
+  margin: -1.2rem 0;
+  /* Asegurar que el indicador siempre sea visible */
+  opacity: 1;
+  visibility: visible;
+}
+
+/* El fondo visual se aplica a un pseudo-elemento para mantenerlo centrado */
+.sliderIndicator span::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 1.6px;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.4s cubic-bezier(0.4, 0, 0.2, 1), width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: background, width;
+  opacity: 1;
+}
+
+.sliderIndicator span::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, calc(-100% - 6.4px));
+  background: rgba(0, 255, 157, 0.12);
+  color: var(--accent-color);
+  padding: 0.16rem 0.48rem;
+  border-radius: 999px;
+  font-size: 0.52rem;
+  letter-spacing: 0.05em;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  white-space: nowrap;
+}
+
+.sliderIndicator span:hover::after {
+  opacity: 1;
+  transform: translate(-50%, calc(-100% - 10.4px));
+}
+
+.sliderIndicator span.active {
+  width: 38.4px;
+}
+
+.sliderIndicator span.active::before {
+  background: var(--accent-color) !important;
+  width: 100%;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Estilos invertidos para la primera slide (fondo oscuro) */
+.sliderIndicator.onDarkSlide span::before {
+  background: rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(4px);
+}
+
+/* El indicador activo mantiene el color verde - mayor especificidad */
+.sliderIndicator.onDarkSlide span.active::before {
+  background: var(--accent-color) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.sliderIndicator.onDarkSlide span::after {
+  background: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+@media (max-width: 768px) {
+  .slider {
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+    padding-top: 0;
+  }
+
+  .slidesWrapper {
+    height: 100%;
+  }
+
+  .slide {
+    padding: 5rem 1rem 4rem;
+    align-items: flex-start;
+    height: 100%;
+    max-height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .slideHome {
+    padding: 3rem 0 5rem 0;
+    height: 100%;
+    max-height: 100vh;
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  .sliderArrow {
+    display: none;
+  }
+
+  .sliderIndicator {
+    bottom: 2.5rem;
+    position: fixed;
+    z-index: 100;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .slideHome {
+    padding: 0;
+  }
+
+  .sliderArrow {
+    display: none;
+  }
+
+  .slide {
+    padding: 5rem 1rem 4rem;
+  }
+}
+

@@ -1,0 +1,213 @@
+.slideShell {
+  width: min(880px, 100%);
+  margin: 0 auto;
+  display: flex;
+  gap: 2.4rem;
+  align-items: center;
+}
+
+.slideShellStack {
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.slideShellStack .slideText {
+  width: 100%;
+}
+
+.slideText {
+  flex: 1;
+}
+
+.slideText h2 {
+  font-size: clamp(1.92rem, 3.2vw, 2.88rem);
+  margin-bottom: 0.8rem;
+}
+
+.slideEyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.6rem;
+  margin-bottom: 0.8rem;
+  opacity: 0.7;
+}
+
+.slideParagraph {
+  line-height: 1.6;
+  margin-bottom: 0.8rem;
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.slideMedia {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.slideImage {
+  max-width: 288px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 19.2px;
+  filter: grayscale(10%) contrast(110%);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+}
+
+.timeline {
+  margin-top: 2rem;
+  border-left: 2px solid rgba(0, 0, 0, 0.08);
+  padding-left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.timelineItem {
+  position: relative;
+}
+
+.timelineItem::before {
+  content: '';
+  position: absolute;
+  left: -1.75rem;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent-color);
+  box-shadow: 0 0 12px rgba(0, 255, 157, 0.5);
+}
+
+.timelineItem strong {
+  display: block;
+  font-size: 0.88rem;
+  margin-bottom: 0.2rem;
+}
+
+.timelineItem span {
+  font-size: 0.76rem;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.projectsList,
+.servicesGrid {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.projectsList {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.projectsList li {
+  list-style: none;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+}
+
+.projectsList strong {
+  display: block;
+  font-size: 0.84rem;
+  margin-bottom: 0.28rem;
+}
+
+.servicesGrid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.serviceCard {
+  padding: 1.4rem;
+  border-radius: 18px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease;
+}
+
+.serviceCard:hover {
+  transform: translateY(-6px);
+}
+
+.slideBullets {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+}
+
+.slideBullets li {
+  margin-bottom: 0.64rem;
+  display: flex;
+  gap: 0.4rem;
+  align-items: flex-start;
+  font-size: 0.76rem;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+.slideBullets li::before {
+  content: '•';
+  color: var(--accent-color);
+  font-size: 0.96rem;
+  line-height: 1;
+}
+
+.contactActions {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contactLink {
+  text-decoration: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 0.6rem 1.44rem;
+  border-radius: 999px;
+  font-weight: 600;
+  color: var(--text-color);
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.contactLink:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+}
+
+@media (max-width: 768px) {
+  .slideShell {
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .slideImage {
+    max-width: 240px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+
+  .statsGrid {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 769px) {
+  .slideImage {
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+}
+
