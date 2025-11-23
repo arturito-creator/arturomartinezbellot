@@ -109,6 +109,8 @@
 .timelineItem span {
   font-size: 0.76rem;
   color: rgba(0, 0, 0, 0.7);
+  display: block;
+  margin-bottom: 0.5rem;
 }
 
 .projectsSection {
@@ -360,6 +362,246 @@
     height: auto;
     aspect-ratio: 3 / 4;
     object-fit: cover;
+  }
+}
+
+/* Estilos para timeline items con "saber más" */
+.timelineItemWithLearnMore {
+  position: relative;
+}
+
+.timelineItemContent {
+  position: relative;
+  width: 100%;
+}
+
+.timelineItemContent .learnMoreButton {
+  display: inline-block;
+  width: auto;
+}
+
+.learnMoreButton {
+  margin-top: 0;
+  font-family: var(--font-manrope), 'Manrope', sans-serif;
+  font-size: 0.65rem;
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+  background: transparent;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  display: inline-block;
+  width: auto;
+  max-width: fit-content;
+  letter-spacing: 0.02em;
+}
+
+.learnMoreButton:hover {
+  border-color: rgba(0, 0, 0, 0.15);
+  color: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.02);
+}
+
+/* Tarjeta flotante de timeline */
+.timelineCard {
+  width: min(420px, 85vw);
+  max-width: 450px;
+  max-height: min(75vh, 650px);
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.timelineCardOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+}
+
+.timelineCardMobileContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1001;
+  pointer-events: none;
+  padding: 1rem;
+}
+
+.timelineCardMobile {
+  max-height: min(85vh, 700px);
+  width: min(90vw, 450px);
+  padding: 1.25rem;
+  background: white;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  pointer-events: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.timelineCardClose {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #999;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.3s;
+  padding: 0;
+}
+
+.timelineCardClose:hover {
+  color: var(--text-color);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.timelineCardTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+  line-height: 1.3;
+}
+
+.timelineCardSubtitle {
+  font-size: 0.8rem;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 0.85rem;
+  font-weight: 500;
+}
+
+.timelineCardStats {
+  margin: 1rem 0;
+}
+
+.timelineCardStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.timelineCardStat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.timelineCardStat strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent-color);
+}
+
+.timelineCardStat small {
+  font-size: 0.7rem;
+  color: rgba(0, 0, 0, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timelineCardHighlights {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.timelineCardHighlight {
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: rgba(0, 0, 0, 0.75);
+  padding-left: 1.2rem;
+  position: relative;
+}
+
+.timelineCardHighlight::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--accent-color);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.timelineCardParagraph {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.7);
+  margin-bottom: 0.75rem;
+}
+
+.timelineCardNote {
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: rgba(0, 0, 0, 0.6);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.timelineCardSocial {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.timelineCardSocialLink {
+  font-size: 0.75rem;
+  color: var(--accent-color);
+  text-decoration: none;
+  font-weight: 600;
+  transition: opacity 0.3s ease;
+}
+
+.timelineCardSocialLink:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .timelineCard {
+    width: min(350px, 85vw);
+    padding: 1.25rem;
+  }
+  
+  .timelineCardTitle {
+    font-size: 1.1rem;
+    padding-right: 2rem;
+  }
+  
+  .timelineCardStatsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
   }
 }
 
