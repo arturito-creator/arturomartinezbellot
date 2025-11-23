@@ -14,7 +14,9 @@ export default function Home() {
     <LanguageProvider>
       <OrganicBackground />
       <TopNav />
-      <Slider onHotspotClick={setActiveModal} />
+      <main role="main" aria-label="Contenido principal del portfolio">
+        <Slider onHotspotClick={setActiveModal} />
+      </main>
       <Modal activeModal={activeModal} onClose={() => setActiveModal(null)} />
     </LanguageProvider>
   )
