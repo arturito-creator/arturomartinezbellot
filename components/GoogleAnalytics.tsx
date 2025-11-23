@@ -1,13 +1,17 @@
 'use client'
 
+import { useEffect } from 'react'
 import Script from 'next/script'
+import { useCookieConsent } from '@/contexts/CookieConsentContext'
 
 interface GoogleAnalyticsProps {
   gaId?: string
 }
 
 export default function GoogleAnalytics({ gaId }: GoogleAnalyticsProps) {
-  if (!gaId) {
+  const { consent, hasConsent } = useCookieConsent()
+
+  if (!gaId || !hasConsent || !consent.analytics) {
     return null
   }
 

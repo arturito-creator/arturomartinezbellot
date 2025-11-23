@@ -1,13 +1,16 @@
 'use client'
 
 import Script from 'next/script'
+import { useCookieConsent } from '@/contexts/CookieConsentContext'
 
 interface HotjarProps {
   hjid?: number | string
 }
 
 export default function Hotjar({ hjid }: HotjarProps) {
-  if (!hjid) {
+  const { consent, hasConsent } = useCookieConsent()
+
+  if (!hjid || !hasConsent || !consent.analytics) {
     return null
   }
 

@@ -1,0 +1,197 @@
+.bannerOverlay {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000;
+  padding: 1rem;
+  pointer-events: none;
+}
+
+.banner {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  pointer-events: all;
+  position: relative;
+  border: 1px solid #e5e7eb;
+}
+
+.bannerContent {
+  padding: 1.5rem;
+  position: relative;
+}
+
+.bannerTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem 0;
+  color: #111827;
+}
+
+.bannerText {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #4b5563;
+  margin: 0 0 1rem 0;
+}
+
+.details {
+  margin: 1rem 0;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.cookieType {
+  margin-bottom: 1rem;
+}
+
+.cookieType:last-child {
+  margin-bottom: 0;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.checkboxLabel span {
+  flex: 1;
+  color: #374151;
+}
+
+.checkboxLabel strong {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: #111827;
+}
+
+.checkboxLabel small {
+  color: #6b7280;
+  font-size: 0.8125rem;
+}
+
+.checkbox {
+  margin-top: 0.125rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  cursor: pointer;
+  accent-color: #000000;
+}
+
+.checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.bannerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.btnReject,
+.btnCustom,
+.btnAcceptCustom,
+.btnAccept {
+  padding: 0.625rem 1.25rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-family: inherit;
+}
+
+.btnReject {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.btnReject:hover {
+  background: #e5e7eb;
+}
+
+.btnCustom {
+  background: transparent;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+}
+
+.btnCustom:hover {
+  background: #f9fafb;
+}
+
+.btnAcceptCustom {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+.btnAcceptCustom:hover {
+  background: #111827;
+}
+
+.btnAccept {
+  background: #000000;
+  color: #ffffff;
+  flex: 1;
+  min-width: 120px;
+}
+
+.btnAccept:hover {
+  background: #1a1a1a;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 0.25rem;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.closeBtn:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+@media (max-width: 640px) {
+  .bannerOverlay {
+    padding: 0.75rem;
+  }
+
+  .bannerContent {
+    padding: 1.25rem;
+  }
+
+  .bannerActions {
+    flex-direction: column;
+  }
+
+  .btnAccept {
+    width: 100%;
+  }
+}
+

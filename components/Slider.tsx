@@ -99,7 +99,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   }, [])
 
-  // Verificar si el touch comenzó en un elemento interactivo
+  // Verificar si el touch comenzó en un elemento interactivo (excluyendo projectCard para permitir swipes)
   const isInteractiveElement = (target: EventTarget | null): boolean => {
     if (!target) return false
     const element = target as HTMLElement
@@ -117,18 +117,32 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     )
   }
 
+  // Verificar si el touch está en un projectCard (para manejar taps vs swipes)
+  const isProjectCard = (target: EventTarget | null): boolean => {
+    if (!target) return false
+    const element = target as HTMLElement
+    return !!(
+      element.closest('[data-interactive="true"]') ||
+      element.closest('[class*="projectCard"]') ||
+      element.closest('[class*="project-card"]') ||
+      element.closest('li[class*="project"]')
+    )
+  }
+
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!isTouchDevice.current) return
     
-    // Si el touch comenzó en un elemento interactivo, ignorarlo
+    // Si el touch comenzó en un elemento interactivo (no projectCard), ignorarlo
     if (isInteractiveElement(e.target)) {
       touchStartedOnInteractive.current = true
       return
     }
     
+    // Permitir tracking de touch incluso en projectCard para detectar swipes
     touchStartedOnInteractive.current = false
     e.stopPropagation()
     touchStartX.current = e.touches[0].clientX
+    touchEndX.current = e.touches[0].clientX // Inicializar también touchEndX
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -142,7 +156,14 @@ export default function Slider({ onHotspotClick }: SliderProps) {
   const handleTouchEnd = (e: React.TouchEvent) => {
     if (!isTouchDevice.current) return
     
-    // Si el touch comenzó en un elemento interactivo, ignorarlo completamente
+    // Si hay un modal abierto, no procesar eventos táctiles
+    if (isModalOpen()) {
+      touchStartX.current = 0
+      touchEndX.current = 0
+      return
+    }
+    
+    // Si el touch comenzó en un elemento interactivo (no projectCard), ignorarlo completamente
     if (touchStartedOnInteractive.current) {
       touchStartedOnInteractive.current = false
       touchStartX.current = 0
@@ -150,21 +171,77 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       return
     }
     
-    e.stopPropagation()
+    // Verificar nuevamente si el touch terminó en un elemento interactivo (no projectCard)
+    if (isInteractiveElement(e.target)) {
+      touchStartX.current = 0
+      touchEndX.current = 0
+      return
+    }
+    
+    // Verificar si el touch está en el overlay o modal
+    const target = e.target as HTMLElement
+    if (
+      target.closest('[class*="expandedOverlay"]') ||
+      target.closest('[class*="expanded-overlay"]') ||
+      target.closest('[class*="expandedCard"]') ||
+      target.closest('[class*="expanded-card"]')
+    ) {
+      touchStartX.current = 0
+      touchEndX.current = 0
+      return
+    }
+    
     const distance = touchEndX.current - touchStartX.current
+    const isProjectCardElement = isProjectCard(e.target)
+    
+    // Si hay un swipe significativo (>50px), navegar según la dirección (incluso sobre projectCard)
     if (Math.abs(distance) > 50) {
+      e.stopPropagation()
+      e.preventDefault() // Prevenir que el onClick del projectCard se ejecute
       if (distance > 0) {
         prevSlide()
       } else {
         nextSlide()
       }
+      touchStartX.current = 0
+      touchEndX.current = 0
+      return
     }
+    
+    // Si es un tap simple (distancia pequeña)
+    if (isProjectCardElement) {
+      // Si es tap sobre projectCard, NO navegar (dejar que el onClick se ejecute)
+      touchStartX.current = 0
+      touchEndX.current = 0
+      return
+    }
+    
+    // Si es tap simple en otra área, avanzar a la siguiente slide
+    e.stopPropagation()
+    nextSlide()
     touchStartX.current = 0
     touchEndX.current = 0
   }
 
-  // Prevenir que clicks en las slides cambien de slide
+  // Verificar si hay un modal abierto
+  const isModalOpen = (): boolean => {
+    // Verificar si existe un overlay de modal visible
+    const overlay = document.querySelector('[class*="expandedOverlay"]') || 
+                    document.querySelector('[class*="expanded-overlay"]') ||
+                    document.querySelector('[class*="overlay"]')
+    if (!overlay) return false
+    const style = window.getComputedStyle(overlay)
+    return style.display !== 'none' && style.opacity !== '0' && style.visibility !== 'hidden'
+  }
+
+  // Manejar clicks en las slides (solo para desktop, en móvil se usa touch)
   const handleSlideClick = (e: React.MouseEvent) => {
+    // Si hay un modal abierto, no procesar clicks
+    if (isModalOpen()) {
+      e.stopPropagation()
+      return
+    }
+
     // Solo prevenir si el click NO es en un botón, link u otro elemento interactivo
     const target = e.target as HTMLElement
     const isInteractive = 
@@ -172,10 +249,20 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       target.closest('a') ||
       target.closest('input') ||
       target.closest('textarea') ||
-      target.closest('[role="button"]')
+      target.closest('[role="button"]') ||
+      target.closest('[data-interactive="true"]') ||
+      target.closest('[class*="projectCard"]') ||
+      target.closest('[class*="project-card"]') ||
+      target.closest('li[class*="project"]') ||
+      target.closest('[class*="expandedOverlay"]') ||
+      target.closest('[class*="expanded-overlay"]') ||
+      target.closest('[class*="expandedCard"]') ||
+      target.closest('[class*="expanded-card"]')
     
     if (!isInteractive) {
       e.stopPropagation()
+      // En desktop, el click también puede avanzar (opcional, según preferencia)
+      // Pero en móvil se maneja con touch events
     }
   }
 

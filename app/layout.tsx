@@ -2,8 +2,9 @@ import type { Metadata } from 'next'
 import { Manrope } from 'next/font/google'
 import './globals.css'
 import StructuredData from '@/components/StructuredData'
-import GoogleAnalytics from '@/components/GoogleAnalytics'
-import Hotjar from '@/components/Hotjar'
+import AnalyticsWrapper from '@/components/AnalyticsWrapper'
+import CookieBanner from '@/components/CookieBanner'
+import { CookieConsentProvider } from '@/contexts/CookieConsentContext'
 
 const manrope = Manrope({
   subsets: ['latin'],
@@ -107,10 +108,15 @@ export default function RootLayout({
   return (
     <html lang="es" itemScope itemType="https://schema.org/Person">
       <body className={manrope.variable}>
-        <StructuredData />
-        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID || 'G-0T8YYKHSZV'} />
-        <Hotjar hjid={process.env.NEXT_PUBLIC_HOTJAR_ID || 6583508} />
-        {children}
+        <CookieConsentProvider>
+          <StructuredData />
+          <AnalyticsWrapper 
+            gaId={process.env.NEXT_PUBLIC_GA_ID || 'G-0T8YYKHSZV'} 
+            hjid={process.env.NEXT_PUBLIC_HOTJAR_ID || 6583508} 
+          />
+          {children}
+          <CookieBanner />
+        </CookieConsentProvider>
       </body>
     </html>
   )
