@@ -12,7 +12,7 @@ interface Particle {
 }
 
 export function useHotspotPhysics(
-  sceneRef: React.RefObject<HTMLElement>,
+  sceneRef: React.RefObject<HTMLElement | null>,
   hotspotElements: HTMLElement[]
 ) {
   const particlesRef = useRef<Particle[]>([])

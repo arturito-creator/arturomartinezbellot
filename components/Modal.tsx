@@ -10,7 +10,20 @@ interface ModalProps {
   onClose: () => void
 }
 
-const modalData = {
+interface ModalContent {
+  title: string
+  subtitle?: string
+  paragraphs?: string[]
+  statsGroups?: Array<Array<{ value: string; label: string }>>
+  note?: string
+  socialLinks?: Array<{
+    icon: string
+    url: string
+    label: string
+  }>
+}
+
+const modalData: Record<'es' | 'en', Record<string, ModalContent>> = {
   es: {
     euromon: {
       title: 'Euromon PLV',
@@ -149,8 +162,8 @@ export default function Modal({ activeModal, onClose }: ModalProps) {
     }
   }, [activeModal])
 
-  const content = activeModal
-    ? modalData[language]?.[activeModal as keyof typeof modalData.es] || null
+  const content: ModalContent | null = activeModal
+    ? modalData[language]?.[activeModal] || null
     : null
 
   return (

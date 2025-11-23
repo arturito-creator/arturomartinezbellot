@@ -22,6 +22,7 @@ export default function OrganicBackground() {
     const smoothMouse = { x: 0, y: 0 }
 
     function resize() {
+      if (!canvas) return
       width = canvas.width = window.innerWidth
       height = canvas.height = window.innerHeight
       initLines()
