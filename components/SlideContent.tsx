@@ -117,9 +117,12 @@ export default function SlideContent({ slide }: SlideContentProps) {
   }
 
   if (slide.type === 'projects') {
-    const hasActiveProjects = slide.projectsActive && slide.projectsActive.length > 0
-    const hasPastProjects = slide.projectsPast && slide.projectsPast.length > 0
-    const hasLegacyProjects = slide.projects && slide.projects.length > 0
+    const projectsActive = slide.projectsActive
+    const projectsPast = slide.projectsPast
+    const projects = slide.projects
+    const hasActiveProjects = projectsActive && projectsActive.length > 0
+    const hasPastProjects = projectsPast && projectsPast.length > 0
+    const hasLegacyProjects = projects && projects.length > 0
 
     let projectIndex = 0
 
@@ -129,11 +132,11 @@ export default function SlideContent({ slide }: SlideContentProps) {
           <div className={styles.slideText}>
             {eyebrow}
             <h2>{slide.title}</h2>
-            {hasActiveProjects && (
+            {hasActiveProjects && projectsActive && (
               <div className={styles.projectsSection}>
                 <h3 className={styles.projectsSectionTitle}>{language === 'es' ? 'Activos' : 'Active'}</h3>
                 <ul className={styles.projectsList}>
-                  {slide.projectsActive.map((project, i) => {
+                  {projectsActive.map((project, i) => {
                     const index = projectIndex++
                     return (
                       <li 
@@ -154,11 +157,11 @@ export default function SlideContent({ slide }: SlideContentProps) {
                 </ul>
               </div>
             )}
-            {hasPastProjects && (
+            {hasPastProjects && projectsPast && (
               <div className={styles.projectsSection}>
                 <h3 className={styles.projectsSectionTitle}>{language === 'es' ? 'Pasados' : 'Past'}</h3>
                 <ul className={styles.projectsList}>
-                  {slide.projectsPast.map((project, i) => {
+                  {projectsPast.map((project, i) => {
                     const index = projectIndex++
                     return (
                       <li 
@@ -179,9 +182,9 @@ export default function SlideContent({ slide }: SlideContentProps) {
                 </ul>
               </div>
             )}
-            {hasLegacyProjects && !hasActiveProjects && !hasPastProjects && (
+            {hasLegacyProjects && !hasActiveProjects && !hasPastProjects && projects && (
               <ul className={styles.projectsList}>
-                {slide.projects.map((project, i) => {
+                {projects.map((project, i) => {
                   const index = projectIndex++
                   return (
                     <li 
