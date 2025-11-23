@@ -91,16 +91,17 @@ export default function SlideContent({ slide }: SlideContentProps) {
   }
 
   if (slide.type === 'timeline') {
+    const timeline = slide.timeline
     return (
       <div className={`${styles.slideShell} ${styles.slideShellStack}`}>
         <div className={styles.slideText}>
           {eyebrow}
           <h2>{slide.title}</h2>
           {paragraphs}
-          {slide.timeline && (
+          {timeline && (
             <div className={styles.timeline}>
-              {slide.timeline.map((item, i) => {
-                const isLast = i === slide.timeline.length - 1
+              {timeline.map((item, i) => {
+                const isLast = i === timeline.length - 1
                 return (
                   <div key={i} className={`${styles.timelineItem} ${isLast ? styles.timelineItemPast : ''}`}>
                     <strong>{item.title}</strong>
