@@ -118,7 +118,7 @@ export const slidesContent: Record<'es' | 'en', Slide[]> = {
       ],
       links: [
         { label: 'Email', href: 'mailto:hello@arturo.ai' },
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/arturo-martinez', external: true },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/arturo-martinez-bellot/', external: true },
       ],
     },
   ],
@@ -222,7 +222,7 @@ export const slidesContent: Record<'es' | 'en', Slide[]> = {
       ],
       links: [
         { label: 'Email', href: 'mailto:hello@arturo.ai' },
-        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/arturo-martinez', external: true },
+        { label: 'LinkedIn', href: 'https://www.linkedin.com/in/arturo-martinez-bellot/', external: true },
       ],
     },
   ],

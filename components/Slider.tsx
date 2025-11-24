@@ -22,6 +22,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
   const touchEndX = useRef(0)
   const currentIndexRef = useRef(0)
   const isTransitioningRef = useRef(false)
+  const wheelTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const lastWheelTimeRef = useRef(0)
 
   const slides = slidesContent[language] || []
   const totalSlides = slides.length + 1 // +1 for home slide
@@ -88,6 +90,53 @@ export default function Slider({ onHotspotClick }: SliderProps) {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [nextSlide, prevSlide])
+
+  // Wheel scroll navigation (solo para ordenador)
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      // Solo activar en ordenador (no en dispositivos táctiles)
+      if (isTouchDevice.current) return
+      
+      // Si hay un modal abierto, no procesar el scroll
+      if (isModalOpen()) return
+      
+      // Si el chat está abierto y el scroll está dentro del chat, no procesar el scroll
+      if (isChatOpen() && isScrollInsideChat(e)) return
+      
+      // Si está en transición, ignorar el scroll
+      if (isTransitioningRef.current) return
+      
+      // Throttling: solo procesar si han pasado al menos 500ms desde el último scroll
+      const now = Date.now()
+      if (now - lastWheelTimeRef.current < 500) return
+      
+      // Detectar dirección del scroll
+      const deltaY = e.deltaY
+      
+      // Si el scroll es significativo (más de 30px)
+      if (Math.abs(deltaY) > 30) {
+        e.preventDefault()
+        lastWheelTimeRef.current = now
+        
+        // Scroll hacia abajo = siguiente slide
+        if (deltaY > 0) {
+          nextSlide()
+        } 
+        // Scroll hacia arriba = slide anterior
+        else {
+          prevSlide()
+        }
+      }
+    }
+
+    const sliderElement = sliderRef.current
+    if (sliderElement) {
+      sliderElement.addEventListener('wheel', handleWheel, { passive: false })
+      return () => {
+        sliderElement.removeEventListener('wheel', handleWheel)
+      }
+    }
   }, [nextSlide, prevSlide])
 
   // Touch/swipe support (solo para dispositivos táctiles reales)
@@ -232,6 +281,32 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     if (!overlay) return false
     const style = window.getComputedStyle(overlay)
     return style.display !== 'none' && style.opacity !== '0' && style.visibility !== 'hidden'
+  }
+
+  // Verificar si el chat está abierto
+  const isChatOpen = (): boolean => {
+    // Verificar si existe el contenedor del chat visible
+    const chatContainer = document.querySelector('[class*="chatContainer"]') ||
+                          document.querySelector('[class*="modalContent"]') ||
+                          document.querySelector('[class*="panelContainer"]')
+    if (!chatContainer) return false
+    const style = window.getComputedStyle(chatContainer)
+    return style.display !== 'none' && style.opacity !== '0' && style.visibility !== 'hidden'
+  }
+
+  // Verificar si el scroll está dentro del área del chat
+  const isScrollInsideChat = (e: WheelEvent): boolean => {
+    const chatContainer = document.querySelector('[class*="chatContainer"]') ||
+                          document.querySelector('[class*="modalContent"]') ||
+                          document.querySelector('[class*="panelContainer"]')
+    if (!chatContainer) return false
+    
+    const rect = chatContainer.getBoundingClientRect()
+    const x = e.clientX
+    const y = e.clientY
+    
+    // Verificar si el punto del scroll está dentro del área del chat
+    return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom
   }
 
   // Manejar clicks en las slides (solo para desktop, en móvil se usa touch)

@@ -17,7 +17,7 @@ export default function StructuredData() {
       image: `${siteUrl}/Who_Arturo.jpeg`,
       email: 'hello@arturo.ai',
       sameAs: [
-        'https://www.linkedin.com/in/arturo-martinez',
+        'https://www.linkedin.com/in/arturo-martinez-bellot/',
       ],
       knowsAbout: [
         'AI Marketing',

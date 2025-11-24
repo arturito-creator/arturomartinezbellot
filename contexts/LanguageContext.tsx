@@ -15,7 +15,13 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const translations = {
   es: {
     nav: { work: 'Proyectos', contact: 'Contacto' },
-    intro: { hello: 'Hola', nameLine: 'mi nombre es', swipeHint: 'desliza →' },
+    intro: { hello: 'Hola', nameLine: 'mi nombre es', swipeHint: 'desliza →', chatButton: 'Chatea con mi IA', chatting: 'Chateando...' },
+    chat: { 
+      placeholder: 'Escribe tu mensaje...', 
+      send: 'Enviar', 
+      welcome: '¡Hola! Soy Arturo.AI. ¿En qué puedo ayudarte?',
+      response: 'Gracias por tu mensaje. Esta funcionalidad estará disponible pronto.'
+    },
     hotspots: {
       euromon: { title: 'Euromon PLV', description: 'Transformación digital retail', tags: ['Retail', 'Data'] },
       ailab: { title: 'The AI Lab', description: 'Micro-vídeos de IA', tags: ['Contenido', 'Growth'] },
@@ -25,7 +31,13 @@ const translations = {
   },
   en: {
     nav: { work: 'Work', contact: 'Contact' },
-    intro: { hello: 'Hi', nameLine: 'my name is', swipeHint: 'swipe →' },
+    intro: { hello: 'Hi', nameLine: 'my name is', swipeHint: 'swipe →', chatButton: 'Chat with my AI', chatting: 'Chatting...' },
+    chat: { 
+      placeholder: 'Type your message...', 
+      send: 'Send', 
+      welcome: 'Hi! I\'m Arturo.AI. How can I help you?',
+      response: 'Thanks for your message. This functionality will be available soon.'
+    },
     hotspots: {
       euromon: { title: 'Euromon PLV', description: 'Retail digital transformation', tags: ['Retail', 'Data'] },
       ailab: { title: 'The AI Lab', description: 'AI micro-videos', tags: ['Content', 'Growth'] },
