@@ -22,6 +22,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
   const touchEndX = useRef(0)
   const touchStartY = useRef(0)
   const touchEndY = useRef(0)
+  const touchStartTime = useRef(0)
   const currentIndexRef = useRef(0)
   const isTransitioningRef = useRef(false)
   const wheelTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -150,6 +151,18 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     isTouchDevice.current = 'ontouchstart' in window || navigator.maxTouchPoints > 0
   }, [])
 
+  // Verificar si el touch está dentro del área del chat
+  const isTouchInsideChat = (target: HTMLElement): boolean => {
+    // Verificar si el elemento o alguno de sus ancestros es parte del chat
+    return !!(
+      target.closest('[class*="chatContainer"]') ||
+      target.closest('[class*="modalContent"]') ||
+      target.closest('[class*="panelContainer"]') ||
+      target.closest('[class*="messagesContainer"]') ||
+      target.closest('[class*="inputContainer"]')
+    )
+  }
+
   // Verificar si el touch comenzó en un elemento interactivo (excluyendo projectCard para permitir swipes)
   const isInteractiveElement = (target: EventTarget | null): boolean => {
     if (!target) return false
@@ -183,6 +196,14 @@ export default function Slider({ onHotspotClick }: SliderProps) {
   const handleTouchStart = (e: React.TouchEvent) => {
     if (!isTouchDevice.current) return
     
+    const target = e.target as HTMLElement
+    
+    // Si el chat está abierto y el touch comenzó dentro del chat, ignorarlo completamente
+    if (isChatOpen() && isTouchInsideChat(target)) {
+      touchStartedOnInteractive.current = true
+      return
+    }
+    
     // Si el touch comenzó en un elemento interactivo (no projectCard), ignorarlo
     if (isInteractiveElement(e.target)) {
       touchStartedOnInteractive.current = true
@@ -196,6 +217,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     touchEndX.current = e.touches[0].clientX // Inicializar también touchEndX
     touchStartY.current = e.touches[0].clientY
     touchEndY.current = e.touches[0].clientY // Inicializar también touchEndY
+    touchStartTime.current = Date.now() // Registrar tiempo de inicio
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -216,6 +238,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
@@ -226,6 +249,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
@@ -235,6 +259,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
@@ -250,6 +275,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
@@ -257,13 +283,59 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     const distanceY = touchEndY.current - touchStartY.current
     const isProjectCardElement = isProjectCard(e.target)
     
-    // Solo cambiar de slide si el movimiento horizontal es mayor que el vertical
+    // Solo cambiar de slide si el movimiento horizontal es significativamente mayor que el vertical
     // Esto previene que el scroll vertical se interprete como swipe horizontal
     const absDistanceX = Math.abs(distanceX)
     const absDistanceY = Math.abs(distanceY)
     
-    // Si hay un swipe significativo horizontal (>50px) Y el movimiento horizontal es mayor que el vertical
-    if (absDistanceX > 50 && absDistanceX > absDistanceY) {
+    // Verificar si el touch está dentro del chat
+    if (isChatOpen() && isTouchInsideChat(target)) {
+      touchStartX.current = 0
+      touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
+      touchStartTime.current = 0
+      return
+    }
+    
+    // Verificar si el elemento tiene scroll vertical disponible
+    const scrollableElement = target.closest('[class*="slideShell"]') || 
+                              target.closest('[class*="slideText"]') ||
+                              target.closest('[class*="timeline"]')
+    
+    let hasVerticalScroll = false
+    if (scrollableElement) {
+      const element = scrollableElement as HTMLElement
+      hasVerticalScroll = element.scrollHeight > element.clientHeight
+    }
+    
+    // Si el elemento tiene scroll vertical y el movimiento vertical es significativo, no cambiar de slide
+    if (hasVerticalScroll && absDistanceY > 20) {
+      touchStartX.current = 0
+      touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
+      touchStartTime.current = 0
+      return
+    }
+    
+    // Calcular velocidad del swipe (píxeles por milisegundo)
+    const touchDuration = Date.now() - touchStartTime.current
+    const swipeVelocity = touchDuration > 0 ? absDistanceX / touchDuration : 0
+    
+    // Requisitos MUY estrictos para cambiar de slide:
+    // 1. Movimiento horizontal mínimo de 120px (aumentado de 80px)
+    // 2. El movimiento horizontal debe ser al menos 2.5x mayor que el vertical (aumentado de 1.5x)
+    // 3. El movimiento vertical debe ser menor a 60px (nuevo requisito)
+    // 4. El swipe debe ser relativamente rápido (más de 0.3 px/ms) para evitar scrolls lentos
+    // 5. El swipe debe durar menos de 500ms (nuevo requisito)
+    const isHorizontalSwipe = absDistanceX > 120 && 
+                              absDistanceX > absDistanceY * 2.5 && 
+                              absDistanceY < 60 &&
+                              swipeVelocity > 0.3 &&
+                              touchDuration < 500
+    
+    if (isHorizontalSwipe) {
       e.stopPropagation()
       e.preventDefault() // Prevenir que el onClick del projectCard se ejecute
       if (distanceX > 0) {
@@ -275,6 +347,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
@@ -285,16 +358,22 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchEndX.current = 0
       touchStartY.current = 0
       touchEndY.current = 0
+      touchStartTime.current = 0
       return
     }
     
     // Si es tap simple en otra área, avanzar a la siguiente slide
-    e.stopPropagation()
-    nextSlide()
+    // Solo si el movimiento total es muy pequeño (tap real, no swipe)
+    if (absDistanceX < 30 && absDistanceY < 30) {
+      e.stopPropagation()
+      nextSlide()
+    }
+    
     touchStartX.current = 0
     touchEndX.current = 0
     touchStartY.current = 0
     touchEndY.current = 0
+    touchStartTime.current = 0
   }
 
   // Verificar si hay un modal abierto
