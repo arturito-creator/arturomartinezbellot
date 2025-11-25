@@ -139,6 +139,7 @@
   border-radius: 0;
   box-shadow: none;
   transform: translateZ(0px);
+  z-index: 1;
 }
 
 .mainPhoto {

@@ -4,12 +4,14 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  z-index: 50;
+  z-index: 100;
   pointer-events: auto;
   /* Transform se establece dinámicamente por el hook de física */
   will-change: transform, left, top;
   /* Asegurar que el contenedor no cambie de tamaño cuando los elementos aparecen */
   min-width: 0;
+  /* Asegurar que esté por encima de elementos con transform 3D */
+  isolation: isolate;
 }
 
 .rightSide {
@@ -87,6 +89,8 @@
   width: 144px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
+  position: relative;
+  z-index: 101;
 }
 
 .rightSide .hotspotCard {

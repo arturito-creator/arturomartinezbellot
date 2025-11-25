@@ -20,6 +20,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
   const slidesWrapperRef = useRef<HTMLDivElement>(null)
   const touchStartX = useRef(0)
   const touchEndX = useRef(0)
+  const touchStartY = useRef(0)
+  const touchEndY = useRef(0)
   const currentIndexRef = useRef(0)
   const isTransitioningRef = useRef(false)
   const wheelTimeoutRef = useRef<NodeJS.Timeout | null>(null)
@@ -192,6 +194,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     e.stopPropagation()
     touchStartX.current = e.touches[0].clientX
     touchEndX.current = e.touches[0].clientX // Inicializar también touchEndX
+    touchStartY.current = e.touches[0].clientY
+    touchEndY.current = e.touches[0].clientY // Inicializar también touchEndY
   }
 
   const handleTouchMove = (e: React.TouchEvent) => {
@@ -200,6 +204,7 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     
     e.stopPropagation()
     touchEndX.current = e.touches[0].clientX
+    touchEndY.current = e.touches[0].clientY
   }
 
   const handleTouchEnd = (e: React.TouchEvent) => {
@@ -209,6 +214,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     if (isModalOpen()) {
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
@@ -217,6 +224,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       touchStartedOnInteractive.current = false
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
@@ -224,6 +233,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     if (isInteractiveElement(e.target)) {
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
@@ -237,23 +248,33 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     ) {
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
-    const distance = touchEndX.current - touchStartX.current
+    const distanceX = touchEndX.current - touchStartX.current
+    const distanceY = touchEndY.current - touchStartY.current
     const isProjectCardElement = isProjectCard(e.target)
     
-    // Si hay un swipe significativo (>50px), navegar según la dirección (incluso sobre projectCard)
-    if (Math.abs(distance) > 50) {
+    // Solo cambiar de slide si el movimiento horizontal es mayor que el vertical
+    // Esto previene que el scroll vertical se interprete como swipe horizontal
+    const absDistanceX = Math.abs(distanceX)
+    const absDistanceY = Math.abs(distanceY)
+    
+    // Si hay un swipe significativo horizontal (>50px) Y el movimiento horizontal es mayor que el vertical
+    if (absDistanceX > 50 && absDistanceX > absDistanceY) {
       e.stopPropagation()
       e.preventDefault() // Prevenir que el onClick del projectCard se ejecute
-      if (distance > 0) {
+      if (distanceX > 0) {
         prevSlide()
       } else {
         nextSlide()
       }
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
@@ -262,6 +283,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
       // Si es tap sobre projectCard, NO navegar (dejar que el onClick se ejecute)
       touchStartX.current = 0
       touchEndX.current = 0
+      touchStartY.current = 0
+      touchEndY.current = 0
       return
     }
     
@@ -270,6 +293,8 @@ export default function Slider({ onHotspotClick }: SliderProps) {
     nextSlide()
     touchStartX.current = 0
     touchEndX.current = 0
+    touchStartY.current = 0
+    touchEndY.current = 0
   }
 
   // Verificar si hay un modal abierto

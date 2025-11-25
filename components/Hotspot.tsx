@@ -37,7 +37,7 @@ const Hotspot = forwardRef<HTMLDivElement, HotspotProps>(
         }}
         style={{
           position: 'fixed',
-          zIndex: 50,
+          zIndex: 100,
           pointerEvents: 'auto',
           transformOrigin: 'center center',
         }}
